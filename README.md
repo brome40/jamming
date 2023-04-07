@@ -1,3 +1,7 @@
+# Jamming (Spotify Playlist Builder)
+
+Completed this React project while completing online course on [Codecademy](https://www.codecademy.com/). It allows you to query the Spotify API to build a playlist, give it a name, and import it to your account. 
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
