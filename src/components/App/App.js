@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import './App.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
@@ -10,35 +10,35 @@ const App = () => {
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistName, setPlaylistName] = useState('My Playlist');
 
-  const handleAddTrack = (newTrack) => {
+  const handleAddTrack = useCallback((newTrack) => {
     if (!playlistTracks.find((savedTrack) => savedTrack.id === newTrack.id)) {
       setPlaylistTracks(prevTracks => [...prevTracks, newTrack]);
     }
-  };
+  },[]);
 
-  const handleRemoveTrack = (deletedTrack) => {
+  const handleRemoveTrack = useCallback((deletedTrack) => {
     setPlaylistTracks((prevTracks) => (
       prevTracks.filter((savedTrack) => savedTrack.id !== deletedTrack.id)
     ))
-  };
+  },[]);
 
-  const handleUpdatePlaylistName = (newName) => {
+  const handleUpdatePlaylistName = useCallback((newName) => {
     setPlaylistName(newName);
-  }
+  },[]);
 
-  const handleSavePlaylist = () => {
+  const handleSavePlaylist = useCallback(() => {
     const currentUris = playlistTracks.map(track => track.uri);
     Spotify.savePlaylist(playlistName, currentUris).then(() => {
       setPlaylistName('New Playlist');
       setPlaylistTracks([]);
     })
-  };
+  },[]);
 
-  const handleSearch = (searchTerm) => {
+  const handleSearch = useCallback((searchTerm) => {
     Spotify.search(searchTerm).then(results => {
       setSearchResults(results);
     })
-  }
+  },[]);
 
   return (
     <div>

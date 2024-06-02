@@ -1,6 +1,5 @@
-import SearchBar from "../Components/SearchBar/SearchBar";
+import SearchBar from "../components/SearchBar/SearchBar";
 
-const clientId = '80cb9ca7004540b0a34a58f7b075588b';
 const redirectUri = 'http://brome-musicapp.surge.sh';
 let accessToken;
 
@@ -24,7 +23,7 @@ const Spotify = {
       return accessToken;
     } else {
       //redirect users to the URL below, this calls the Auth API
-      const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
+      const accessUrl = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_SPOTIFY_API_KEY}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
       window.location = accessUrl;
     }
   },
@@ -73,9 +72,7 @@ const Spotify = {
     return fetch('https://api.spotify.com/v1/me', {headers: headers}
     ).then(response => response.json() //convert API response to JSON
     ).then(jsonResponse => {
-
       userId = jsonResponse.id;
-
       //POST request to create new playlist and assigns 'playlistId'
       return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`,
       {
@@ -84,9 +81,7 @@ const Spotify = {
         body: JSON.stringify({ name: name })
       }).then(response => response.json()
       ).then(jsonResponse => {
-
         const playlistId = jsonResponse.id;
-
         //POST request to add tracks to new playlist
         return fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`,
         {
