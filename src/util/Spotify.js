@@ -8,10 +8,9 @@ const Spotify = {
   //getAccessToken Method:
   //user receives access token through implicit grant flow
   getAccessToken() {
-    //check if access token already exists
     if (accessToken) {
       return accessToken;
-    } 
+    }
     //check for access token match in url
     const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
     const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
@@ -29,27 +28,24 @@ const Spotify = {
       window.location = accessUrl;
     }
   },
-  
+
   //search Method:
   //queries API for term, returns track object list
   search(term) {
     const accessToken = Spotify.getAccessToken();
-    //fetch API response
+
     return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     }).then(response => {
-      //convert API response to JSON
       return response.json();
     }).then(jsonResponse => {
-      //json doesn't contains any tracks, return empty array
       if (!jsonResponse.tracks) {
-        return []; 
-      } 
-      //return list of track objects
+        return [];
+      }
+
       return jsonResponse.tracks.items.map(track => ({
-        //properties for each track       
         id: track.id,
         name: track.name,
         artist: track.artists[0].name,
@@ -60,7 +56,7 @@ const Spotify = {
   },
 
   //savePlaylist Method:
-  //1.GET request returns 'userId' 
+  //1.GET request returns 'userId'
   //2.POST request uses 'userId' in API call, assigns 'name' param to new playlist, returns 'playlistId'
   //3.POST request uses 'userId' and 'playlistId' in API call, adds 'trackUris' param to playlist
   savePlaylist(name, trackUris) {
@@ -77,18 +73,18 @@ const Spotify = {
     return fetch('https://api.spotify.com/v1/me', {headers: headers}
     ).then(response => response.json() //convert API response to JSON
     ).then(jsonResponse => {
-      //assign 'userId' to the returned value
+
       userId = jsonResponse.id;
 
       //POST request to create new playlist and assigns 'playlistId'
       return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`,
-      { 
+      {
         headers: headers,
         method: 'POST',
         body: JSON.stringify({ name: name })
-      }).then(response => response.json() //convert API response to JSON
+      }).then(response => response.json()
       ).then(jsonResponse => {
-        //assign 'playlistId' to the returned value
+
         const playlistId = jsonResponse.id;
 
         //POST request to add tracks to new playlist
