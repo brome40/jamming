@@ -1,12 +1,9 @@
-import SearchBar from "../components/SearchBar/SearchBar";
-
-const redirectUri = 'http://brome-musicapp.surge.sh';
 let accessToken;
 
 const Spotify = {
   //getAccessToken Method:
   //user receives access token through implicit grant flow
-  getAccessToken() {
+  getAccessToken () {
     if (accessToken) {
       return accessToken;
     }
@@ -23,7 +20,7 @@ const Spotify = {
       return accessToken;
     } else {
       //redirect users to the URL below, this calls the Auth API
-      const accessUrl = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_SPOTIFY_API_KEY}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
+      const accessUrl = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_SPOTIFY_API_KEY}&response_type=token&scope=playlist-modify-public&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`;
       window.location = accessUrl;
     }
   },
@@ -31,7 +28,8 @@ const Spotify = {
   //search Method:
   //queries API for term, returns track object list
   search(term) {
-    const accessToken = Spotify.getAccessToken();
+    window.localStorage.setItem('searchTerm', term);
+    const accessToken = Spotify.getAccessToken()
 
     return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
       headers: {

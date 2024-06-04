@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './SearchBar.css';
 
 const SearchBar = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(window.localStorage.getItem('searchTerm') ?? '');
 
   const handleSearch = () => {
     onSearch(searchTerm);
@@ -22,6 +22,7 @@ const SearchBar = ({ onSearch }) => {
     <div className="SearchBar">
       <input
         placeholder="Enter A Song, Album, or Artist"
+        value={searchTerm}
         onChange={handleSearchTermChange}
         onKeyDown={handleEnterKeyDown}
       />
